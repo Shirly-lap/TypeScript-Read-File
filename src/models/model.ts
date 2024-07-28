@@ -1,7 +1,4 @@
-export interface DataRow{
-    [key:string]:string
+// Definición de la interfaz para los registros de datos
+export interface DataRecord {
+    [key: string]: string; // Clave de cadena (nombre de la columna) y valor de cadena (valor de la celda)
 }
-
-export type DataTable = DataRow[];
-
-export type ColumName = string[];
