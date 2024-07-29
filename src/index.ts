@@ -1,6 +1,5 @@
-// import Papa from 'papaparse';
+import { parseCSVFile } from './controllers/DataController';
 import { DataRecord } from './models/model';
-
 
 let data: DataRecord[] = []; // Array para almacenar los datos del CSV
 let filteredData: DataRecord[] = []; // Array para almacenar los datos filtrados
@@ -23,17 +22,15 @@ fileInput.addEventListener("change", async () => {
 
         // Validar que el archivo sea CSV
         if ((fileType === "text/csv" || fileType === "application/vnd.ms-excel") && fileExtension === "csv") {
-            Papa.parse(file, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function (result) {
-                    data = result.data as DataRecord[];
-                    filteredData = data;
-                    currentPage = 1;
-                    renderTable(); // Renderizar la tabla con los datos
-                    renderPagination(); // Renderizar la paginación
-                }
-            });
+            try {
+                data = await parseCSVFile(file); // Usar el controlador para parsear el archivo
+                filteredData = data;
+                currentPage = 1;
+                renderTable(); // Renderizar la tabla con los datos
+                renderPagination(); // Renderizar la paginación
+            } catch (error) {
+                alert("Error al procesar el archivo CSV."); // Mostrar un mensaje de error si ocurre algún problema
+            }
         } else {
             alert("Por favor, suba un archivo CSV válido.");
             fileInput.value = ''; // Limpiar el input
